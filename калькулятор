@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор кирпича</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .custom-shadow {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .brick-pattern {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50" viewBox="0 0 100 50"><rect x="0" y="0" width="100" height="25" fill="%23e53e3e" opacity="0.2"/><rect x="0" y="25" width="50" height="25" fill="%23e53e3e" opacity="0.2"/><rect x="50" y="25" width="50" height="25" fill="%23e53e3e" opacity="0.2"/></svg>');
+            background-size: 100px 50px;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl bg-white rounded-2xl custom-shadow overflow-hidden">
+        <!-- Заголовок с узором кирпича -->
+        <div class="brick-pattern bg-red-500 py-6 px-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold">Калькулятор кирпича</h1>
+                    <p class="opacity-90">Рассчитайте необходимое количество материалов</p>
+                </div>
+                <div class="bg-white bg-opacity-20 p-3 rounded-full">
+                    <i class="fas fa-calculator text-2xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Основное содержимое -->
+        <div class="p-6">
+            <!-- Параметры стены -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-ruler-combined mr-2 text-red-500"></i>
+                    Размеры стены
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Длина стены (м)</label>
+                        <div class="relative">
+                            <input type="number" id="wall-length" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="5.0" step="0.1" min="0.1">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500">м</div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Высота стены (м)</label>
+                        <div class="relative">
+                            <input type="number" id="wall-height" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="2.7" step="0.1" min="0.1">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500">м</div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Толщина стены</label>
+                        <select id="wall-thickness" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            <option value="0.12">В полкирпича (12 см)</option>
+                            <option value="0.25" selected>В один кирпич (25 см)</option>
+                            <option value="0.38">В полтора кирпича (38 см)</option>
+                            <option value="0.51">В два кирпича (51 см)</option>
+                            <option value="0.64">В два с половиной кирпича (64 см)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Площадь проёмов (м²)</label>
+                        <div class="relative">
+                            <input type="number" id="openings-area" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="0" step="0.1" min="0">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500">м²</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Параметры кирпича -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-cube mr-2 text-red-500"></i>
+                    Параметры кирпича
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Длина (мм)</label>
+                        <div class="relative">
+                            <input type="number" id="brick-length" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="250" step="1" min="50">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500">мм</div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Ширина (мм)</label>
+                        <div class="relative">
+                            <input type="number" id="brick-width" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="120" step="1" min="50">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500">мм</div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Высота (мм)</label>
+                        <div class="relative">
+                            <input type="number" id="brick-height" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="65" step="1" min="10">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500">мм</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Дополнительные параметры -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-tools mr-2 text-red-500"></i>
+                    Дополнительные параметры
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Толщина шва (мм)</label>
+                        <div class="relative">
+                            <input type="number" id="joint-thickness" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="10" step="1" min="0">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500">мм</div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Запас на бой (%)</label>
+                        <div class="relative">
+                            <input type="number" id="waste-percentage" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="5" step="1" min="0" max="30">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-500">%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопка расчета -->
+            <button id="calculate-btn" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center">
+                <i class="fas fa-calculator mr-2"></i>
+                Рассчитать
+            </button>
+
+            <!-- Результаты -->
+            <div id="results" class="mt-8 hidden">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-chart-bar mr-2 text-red-500"></i>
+                    Результаты расчета
+                </h2>
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <div class="text-sm text-gray-500">Площадь кладки</div>
+                            <div id="masonry-area" class="text-2xl font-bold">0 м²</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <div class="text-sm text-gray-500">Объем кладки</div>
+                            <div id="masonry-volume" class="text-2xl font-bold">0 м³</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <div class="text-sm text-gray-500">Количество кирпичей</div>
+                            <div id="brick-count" class="text-2xl font-bold">0 шт</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <div class="text-sm text-gray-500">С учетом запаса</div>
+                            <div id="total-bricks" class="text-2xl font-bold">0 шт</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 bg-white p-4 rounded-lg border border-gray-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="text-sm text-gray-500">Примерный вес кладки</div>
+                            <i class="fas fa-weight-hanging text-red-500"></i>
+                        </div>
+                        <div id="masonry-weight" class="text-2xl font-bold">0 кг</div>
+                        <div class="text-xs text-gray-500 mt-1">*Приблизительный расчет (1 м³ ≈ 1800 кг)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Подвал -->
+        <div class="bg-gray-100 px-6 py-4 text-center text-sm text-gray-600">
+            <p>Для точного расчета рекомендуем проконсультироваться со специалистом</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calculateBtn = document.getElementById('calculate-btn');
+            const resultsSection = document.getElementById('results');
+            
+            calculateBtn.addEventListener('click', function() {
+                // Получаем значения из полей ввода
+                const wallLength = parseFloat(document.getElementById('wall-length').value) || 0;
+                const wallHeight = parseFloat(document.getElementById('wall-height').value) || 0;
+                const wallThickness = parseFloat(document.getElementById('wall-thickness').value) || 0.25;
+                const openingsArea = parseFloat(document.getElementById('openings-area').value) || 0;
+                
+                const brickLength = parseFloat(document.getElementById('brick-length').value) || 250;
+                const brickWidth = parseFloat(document.getElementById('brick-width').value) || 120;
+                const brickHeight = parseFloat(document.getElementById('brick-height').value) || 65;
+                
+                const jointThickness = parseFloat(document.getElementById('joint-thickness').value) || 10;
+                const wastePercentage = parseFloat(document.getElementById('waste-percentage').value) || 5;
+                
+                // Проверка введенных данных
+                if (wallLength <= 0 || wallHeight <= 0) {
+                    alert('Пожалуйста, введите корректные размеры стены');
+                    return;
+                }
+                
+                // Расчеты
+                const wallArea = wallLength * wallHeight;
+                const masonryArea = wallArea - openingsArea;
+                const masonryVolume = masonryArea * wallThickness;
+                
+                // Размеры кирпича с учетом швов
+                const brickLengthWithJoint = brickLength + jointThickness;
+                const brickWidthWithJoint = brickWidth + jointThickness;
+                const brickHeightWithJoint = brickHeight + jointThickness;
+                
+                // Количество кирпичей в 1 м³
+                const bricksPerCubicMeter = Math.floor(1 / (brickLengthWithJoint/1000 * brickWidthWithJoint/1000 * brickHeightWithJoint/1000));
+                
+                // Общее количество кирпичей
+                const brickCount = Math.ceil(masonryVolume * bricksPerCubicMeter);
+                const totalBricks = Math.ceil(brickCount * (1 + wastePercentage/100));
+                
+                // Примерный вес кладки (1 м³ ≈ 1800 кг)
+                const masonryWeight = Math.round(masonryVolume * 1800);
+                
+                // Отображаем результаты
+                document.getElementById('masonry-area').textContent = masonryArea.toFixed(2) + ' м²';
+                document.getElementById('masonry-volume').textContent = masonryVolume.toFixed(2) + ' м³';
+                document.getElementById('brick-count').textContent = brickCount.toLocaleString() + ' шт';
+                document.getElementById('total-bricks').textContent = totalBricks.toLocaleString() + ' шт';
+                document.getElementById('masonry-weight').textContent = masonryWeight.toLocaleString() + ' кг';
+                
+                // Показываем секцию с результатами
+                resultsSection.classList.remove('hidden');
+                
+                // Прокручиваем к результатам
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
